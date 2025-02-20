@@ -1,0 +1,314 @@
+=== src/App.jsx ===
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+import TapeswitchQuickReferences from './pages/TapeswitchQuickReferences';
+import Home from './pages/Home';
+
+function App() {
+    return (
+        <Router>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/tapeswitch-quick-references" element={<TapeswitchQuickReferences />} />
+                    {/* Add more routes as needed */}
+                </Routes>
+            </Layout>
+        </Router>
+    );
+}
+
+export default App;
+
+
+=== src/components/layout/Layout.jsx ===
+
+import React from 'react';
+import TopNavbar from './TopNavbar';
+import SideNavbar from './SideNavbar';
+import Footer from './Footer';
+
+const Layout = ({ children }) => {
+    return (
+        <div className="min-h-screen flex flex-col">
+            <TopNavbar />
+            <div className="flex flex-1">
+                <SideNavbar />
+                <main className="flex-1 p-8">
+                    {children}
+                </main>
+            </div>
+            <Footer />
+        </div>
+    );
+};
+
+export default Layout;
+
+
+=== src/components/layout/Footer.jsx ===
+
+import React from 'react';
+
+const Footer = () => {
+    return (
+        <footer className="bg-primary text-white py-8">
+            <div className="max-w-7xl mx-auto px-4">
+                <div className="grid grid-cols-3 gap-8">
+                    <div>
+                        <h3 className="text-lg font-semibold mb-4">Company Name</h3>
+                        <p>Controls Automation Safety Engineering</p>
+                        <p>123 Engineering Way</p>
+                        <p>Industrial City, ST 12345</p>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold mb-4">Contact</h3>
+                        <p>Phone: (555) 123-4567</p>
+                        <p>Email: info@company.com</p>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold mb-4">Legal</h3>
+                        <p>Privacy Policy</p>
+                        <p>Terms of Service</p>
+                    </div>
+                </div>
+                <div className="mt-8 pt-8 border-t border-gray-700 text-center">
+                    <p>&copy; 2025 Company Name. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;
+
+
+=== src/components/layout/TopNavbar.jsx ===
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Home } from 'lucide-react';
+
+const TopNavbar = () => {
+    const navItems = [
+        { title: 'Home', path: '/' },
+        { title: 'Blog', path: '/blog' },
+        { title: 'News', path: '/news' },
+        { title: 'Events', path: '/events' },
+        { title: 'Links', path: '/links' },
+        { title: 'Downloads', path: '/downloads' },
+        { title: 'About Us', path: '/about' },
+        { title: 'Contact Us', path: '/contact' },
+        { title: 'Buy Now', path: '/buy' },
+    ];
+
+    return (
+        <nav className="bg-primary text-white shadow-lg">
+            <div className="mx-auto px-5">
+            {/* Parent flex container */}
+                <div className="flex items-center justify-between h-16">
+                    {/* Left-aligned logo and company name */}
+                    <div className="flex items-center space-x-3">
+                        <Home className="h-8 w-8" />
+                        <div>
+                            <span className="font-bold text-xl block">CASECO</span>
+                            <span className="font-bold text-sm block">Controls Automation Safety Company</span>
+                        </div>
+                    </div>
+
+                    {/* Right-aligned navbar links */}
+                    <div className="flex items-center space-x-4">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary transition-colors"
+                            >
+                                {item.title}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    );
+};
+
+export default TopNavbar;
+
+
+
+=== src/components/layout/SideNavbar.jsx ===
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
+
+const SideNavbar = () => {
+    const [hoveredItem, setHoveredItem] = useState(null);
+    let hideTimeout; // To delay hiding submenus
+
+    const navItems = {
+        Applications: [
+            { title: 'Measurement Light Curtains', link: '/measurement-light-curtains' },
+            { title: 'Collision Sensing Bumpers', link: 'https://www.tapeswitch.com/bumpers.html' },
+            { title: 'Controflex Ribbon Switch', link: '/controflex-ribbon-switch' },
+            { title: 'Electric Safety Edge Guards', link: '/electric-safety-edge-guards' },
+            {
+                title: 'Electrical Mats',
+                subitems: [
+                    { title: 'Tapeswitch', link: '/electrical-mats/tapeswitch' },
+                    { title: 'LMI', link: '/electrical-mats/lmi' }
+                ],
+            },
+            { title: 'Measuring and Inspection Systems', link: '/measuring-inspection-systems' },
+            {
+                title: 'Light Curtains',
+                subitems: [
+                    { title: 'EOS-4', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/48-eos4-en' },
+                    { title: 'Admiral', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/49-admiral-en' },
+                    { title: 'SafeGate', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/430-safegate-en' }
+                ],
+            },
+            { title: 'Safety Relays', link: 'https://www.tapeswitch.com/sim.html' },
+            {
+                title: 'Safety Interlock Switches',
+                subitems: [
+                    { title: 'Mechanical Keyed Type', link: 'https://www.reersafety.com/us/en/products/safety-interlock/item/924-safelock-en' },
+                    { title: 'Electronic and Magnetic Type', link: 'https://www.mechancontrols.com/products/o-type/' }
+                ],
+            },
+            { title: 'E-Stop Control Relays', link: 'https://www.reersafety.com/us/en/products/safety-interfaces' },
+        ],
+        Manufacturers: [
+            { title: 'Castell', link: 'http://www.castell.com/us/castell/products.php' },
+            { title: 'Reer Safety', link: 'https://www.reersafety.com/us/en/' },
+            { title: 'Kontronik Power Systems', link: 'https://www.kontronik.com/en.html' },
+            { title: 'Gordon Engineering', link: 'http://www.gordoneng.com/default.htm' },
+            { title: 'London Mat', link: 'http://www.londonmat.com/' },
+            { title: 'Mechan Controls', link: 'http://www.mechancontrols.co.uk/' },
+            { title: 'Micro Epsilon', link: 'http://www.micro-epsilon.com/index.html' },
+            {
+                title: 'Tapeswitch',
+                subitems: [
+                    { title: 'Tapeswitch Corporation', link: 'http://www.tapeswitch.com/index.html' },
+                    {
+                        title: 'Tapeswitch Quick References',
+                        link: '/tapeswitch-quick-references',
+                        isInternal: true
+                    }
+                ],
+            },
+        ],
+    };
+
+    return (
+        <nav className="w-64 bg-gray-100 min-h-screen p-4 text-sm">
+            {Object.entries(navItems).map(([section, items]) => (
+                <div key={section} className="mb-6">
+                    <h2 className="text-lg font-semibold mb-2">{section}</h2>
+                    <ul>
+                        {items.map((item) => (
+                            <li
+                                key={item.title}
+                                className="relative"
+                                onMouseEnter={() => {
+                                    clearTimeout(hideTimeout);
+                                    setHoveredItem(item.title);
+                                }}
+                                onMouseLeave={() => {
+                                    hideTimeout = setTimeout(() => setHoveredItem(null), 300);
+                                }}
+                            >
+                                <div className="flex items-center py-2 px-4 hover:bg-gray-200 cursor-pointer">
+                                    {item.isInternal ? (
+                                        <Link to={item.link} className="block">
+                                            {item.title}
+                                        </Link>
+                                    ) : (
+                                        <a href={item.link} target="_blank" rel="noopener noreferrer" className="block">
+                                            {item.title}
+                                        </a>
+                                    )}
+                                    {item.subitems && <ChevronDown className="ml-2 h-4 w-4" />}
+                                </div>
+
+                                {/* Subitems */}
+                                {hoveredItem === item.title && item.subitems && (
+                                    <ul
+                                        className="absolute left-full top-0 ml-1 bg-white shadow-lg rounded-md p-2"
+                                        onMouseEnter={() => clearTimeout(hideTimeout)}
+                                        onMouseLeave={() => hideTimeout = setTimeout(() => setHoveredItem(null), 300)}
+                                    >
+                                        {item.subitems.map((subitem) => (
+                                            <li key={subitem.title} className="py-1 px-4 hover:bg-gray-100 cursor-pointer whitespace-nowrap">
+                                                {subitem.isInternal ? (
+                                                    <Link to={subitem.link} className="block">
+                                                        {subitem.title}
+                                                    </Link>
+                                                ) : (
+                                                    <a href={subitem.link} target="_blank" rel="noopener noreferrer" className="block">
+                                                        {subitem.title}
+                                                    </a>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </nav>
+    );
+};
+
+export default SideNavbar;
+
+
+
+=== src/pages/TapeswitchQuickReferences.jsx ===
+
+import React from 'react';
+
+const TapeswitchQuickReferences = () => {
+    return (
+        <div className="container mx-auto p-6">
+            <h1 className="text-2xl font-bold mb-4">Tapeswitch Quick References</h1>
+            <p>This page contains quick reference materials for Tapeswitch products.</p>
+
+            <ul className="list-disc ml-6 mt-4">
+                <li><a href="/docs/tapeswitch-product-guide.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Tapeswitch Product Guide (PDF)</a></li>
+                <li><a href="/docs/tapeswitch-safety-manual.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Tapeswitch Safety Manual</a></li>
+                <li><a href="/docs/tapeswitch-troubleshooting.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Troubleshooting Guide</a></li>
+            </ul>
+        </div>
+    );
+};
+
+export default TapeswitchQuickReferences;
+
+
+
+=== src/pages/Home.jsx ===
+
+import React from 'react';
+
+const Home = () => {
+    return (
+        <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl font-bold mb-6">CASECO</h1>
+            <p className="text-lg mb-4">
+                Controls Automation Safety Engineering Company
+            </p>
+            {/* Add more content as needed */}
+        </div>
+    );
+};
+
+export default Home;
+
+
