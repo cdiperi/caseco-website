@@ -540,7 +540,8 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, Menu } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { NavItem, NavItems } from '@/types';
+import { NavItem } from '@/types';
+import { navItems } from '@/data/navItems';
 
 interface Position {
     x: number;
@@ -552,25 +553,6 @@ const SideNavbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [submenuPosition, setSubmenuPosition] = useState<Position>({ x: 0, y: 0 });
     let hideTimeout: NodeJS.Timeout;
-
-    const navItems: NavItems = {
-        Applications: [
-            { title: 'Measurement Light Curtains', link: 'https://www.reersafety.com/us/en/products/measurement-sensors/item/66-micron-en' },
-            { title: 'Collision Sensing Bumpers', link: 'https://www.tapeswitch.com/bumpers.html' },
-            { title: 'Controflex Ribbon Switch', link: 'https://www.tapeswitch.com/ribbon-switches.html' },
-            { title: 'Electric Safety Edge Guards', link: 'https://www.tapeswitch.com/sensing-edges.html' },
-            {
-                title: 'Electrical Mats',
-                subitems: [
-                    { title: 'Tapeswitch', link: 'https://www.tapeswitch.com/safety-mats.html' },
-                    { title: 'LMI', link: 'http://www.londonmat.com/mats/zone.html' }
-                ],
-            },
-        ],
-        Manufacturers: [
-            { title: 'Castell', link: 'http://www.castell.com/us/castell/products.php' },
-        ],
-    };
 
     const handleMouseEnter = useCallback((event: React.MouseEvent<HTMLLIElement>, title: string): void => {
         clearTimeout(hideTimeout);
@@ -1155,6 +1137,168 @@ interface ImportMeta {
 }
 
 
+=== /Users/cdiperi/code/caseco/caseco-website/src/data/downloadsData.ts ===
+
+export interface DownloadLink {
+    title: string;
+    url: string;
+    isExternal?: boolean;
+}
+
+export interface DownloadsCategory {
+    title: string;
+    links: DownloadLink[];
+}
+
+export const downloadsData: DownloadsCategory[] = [
+    {
+        title: "Technical Documentation",
+        links: [
+            {
+                title: "SISTEMA Software",
+                url: "https://www.dguv.de/ifa/praxishilfen/praxishilfen-maschinenschutz/software-sistema/sistema-bibliotheken/index.jsp",
+                isExternal: true
+            },
+            {
+                title: "Introduction to Safety",
+                url: "https://www.reersafety.com/pdf/cataloghi/Safety_Guide_ENG.pdf",
+                isExternal: true
+            },
+            {
+                title: "Distance of Light Curtain from Point",
+                url: "https://www.reersafety.com/calcolo-distanza-di-sicurezza/index.php?lang=en",
+                isExternal: true
+            },
+            {
+                title: "Distance at a Specific Angle",
+                url: "https://www.reersafety.com/calcolo-distanza-di-sicurezza/index.php?lang=en",
+                isExternal: true
+            },
+            {
+                title: "Thermal Imager Optics Calculator",
+                url: "https://www.micro-epsilon.com/temperature-sensors/thermoIMAGER/optics/",
+                isExternal: true
+            },
+            {
+                title: "Turn Key Inspection Systems",
+                url: "https://www.micro-epsilon.com/measurement-systems/",
+                isExternal: true
+            }
+        ]
+    },
+    {
+        title: "Catalogs",
+        links: [
+            {
+                title: "Full Product Sheet",
+                url: "catalogs/full_product_sheet.pdf",
+                isExternal: false
+            },
+            {
+                title: "Bumper Product Sheet",
+                url: "catalogs/bumper_product_sheet.pdf",
+                isExternal: false
+            },
+            {
+                title: "Mat Product Sheet",
+                url: "catalogs/mat_product_sheet.pdf",
+                isExternal: false
+            },
+            {
+                title: "Light Curtain Product Sheet",
+                url: "catalogs/light_curtain_product_sheet.pdf",
+                isExternal: false
+            },
+            {
+                title: "Edge Product Sheet",
+                url: "catalogs/edge_product_sheet.pdf",
+                isExternal: false
+            },
+            {
+                title: "DPM Mats Overview",
+                url: "catalogs/dpm_mats_overview.pdf",
+                isExternal: false
+            },
+            {
+                title: "Full Pizzato Catalog",
+                url: "https://www.pizzato.com/media/images/catalog/category/attachment/ZE_GCS03A18-ENG.pdf",
+                isExternal: true
+            },
+            {
+                title: "SafeGate Overview",
+                url: "catalogs/safegate_overview.pdf",
+                isExternal: false
+            },
+            {
+                title: "SafeGate Brochure",
+                url: "catalogs/safegate_brochure.pdf",
+                isExternal: false
+            },
+            {
+                title: "Microswitches MK series",
+                url: "https://www.pizzatousa.com/catalog/position-switches/index.php",
+                isExternal: true
+            },
+            {
+                title: "Safety hinged switches, Palladio series",
+                url: "https://www.pizzatousa.com/catalog/safety-devices/safety-switches-for-hinged-doors.php",
+                isExternal: true
+            },
+            {
+                title: "Position switches for high temperature",
+                url: "https://www.pizzatousa.com/catalog/position-switches/switches-for-special-applications.php",
+                isExternal: true
+            },
+            {
+                title: "Coded magnetic sensors SR series",
+                url: "https://www.pizzatousa.com/catalog/safety-devices/magnetic-safety-sensors.php",
+                isExternal: true
+            },
+            {
+                title: "Safety switches with solenoid FG series",
+                url: "https://www.pizzatousa.com/catalog/safety-devices/safety-switches-with-separate-actuator-and-lock.php",
+                isExternal: true
+            },
+            {
+                title: "Accessories for rope safety switches, FAST line",
+                url: "https://www.pizzatousa.com/catalog/safety-devices/rope-safety-switches.php",
+                isExternal: true
+            },
+            {
+                title: "Safety switches with separate actuator, FW series",
+                url: "https://www.pizzatousa.com/catalog/safety-devices/safety-switches-with-separate-actuator.php",
+                isExternal: true
+            }
+        ]
+    },
+    {
+        title: "Presentations",
+        links: [
+            {
+                title: "The Muting Function",
+                url: "presentations/the_muting_functions.pptx",
+                isExternal: false
+            },
+            {
+                title: "MOSAIC Safety Systems",
+                url: "https://www.reersafety.com/pdf/Presentazioni/Mosaic_ENG.pdf",
+                isExternal: true
+            },
+            {
+                title: "Micron Measurement Overview",
+                url: "https://www.reersafety.com/pdf/Presentazioni/Micron_ENG.pdf",
+                isExternal: true
+            },
+            {
+                title: "Calculating Minimum Safety Distances",
+                url: "presentations/calculating_minimum_safety_distances.pps",
+                isExternal: false
+            }
+        ]
+    }
+];
+
+
 === /Users/cdiperi/code/caseco/caseco-website/src/data/manufacturers.ts ===
 
 import { Manufacturer } from '@/types';
@@ -1386,6 +1530,30 @@ export const manufacturers: Manufacturer[] = [
 ];
 
 
+=== /Users/cdiperi/code/caseco/caseco-website/src/data/navItems.ts ===
+
+import { NavItems } from '@/types';
+
+export const navItems: NavItems = {
+    Applications: [
+        { title: 'Measurement Light Curtains', link: 'https://www.reersafety.com/us/en/products/measurement-sensors/item/66-micron-en' },
+        { title: 'Collision Sensing Bumpers', link: 'https://www.tapeswitch.com/bumpers.html' },
+        { title: 'Controflex Ribbon Switch', link: 'https://www.tapeswitch.com/ribbon-switches.html' },
+        { title: 'Electric Safety Edge Guards', link: 'https://www.tapeswitch.com/sensing-edges.html' },
+        {
+            title: 'Electrical Mats',
+            subitems: [
+                { title: 'Tapeswitch', link: 'https://www.tapeswitch.com/safety-mats.html' },
+                { title: 'LMI', link: 'http://www.londonmat.com/mats/zone.html' }
+            ],
+        },
+    ],
+    Manufacturers: [
+        { title: 'Castell', link: 'http://www.castell.com/us/castell/products.php' },
+    ],
+};
+
+
 === /Users/cdiperi/code/caseco/caseco-website/src/pages/Buy.tsx ===
 
 import React from 'react';
@@ -1460,15 +1628,30 @@ export default Buy;
 
 === /Users/cdiperi/code/caseco/caseco-website/src/pages/Home.tsx ===
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { manufacturers } from '../data/manufacturers';
 import { ManufacturerSection } from '../components/sections/ManufacturerSection';
+import { Manufacturer } from '@/types';
+
+// Fisher-Yates shuffle algorithm
+const shuffleArray = (array: Manufacturer[]): Manufacturer[] => {
+    const newArray = [...array]; // Create a copy to avoid mutating the original
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // Swap elements
+    }
+    return newArray;
+};
 
 const Home: React.FC = () => {
+    // Use useMemo to only randomize on component mount
+    // This prevents re-shuffling on every render
+    const randomizedManufacturers = useMemo(() => shuffleArray(manufacturers), []);
+
     return (
         <div className="p-6">
             <div className="space-y-16">
-                {manufacturers.map((manufacturer, index) => (
+                {randomizedManufacturers.map((manufacturer, index) => (
                     <ManufacturerSection
                         key={`${manufacturer.name}-${index}`}
                         manufacturer={manufacturer}
@@ -1485,292 +1668,35 @@ export default Home;
 === /Users/cdiperi/code/caseco/caseco-website/src/pages/Downloads.tsx ===
 
 import React from 'react';
-import { getDocumentUrl } from '../utils/documentUtils.ts';
+import { getDocumentUrl } from '../utils/documentUtils';
+import { downloadsData } from '@/data/downloadsData';
 
 const Downloads: React.FC = () => {
     return (
         <div className="container mx-auto p-6">
             <h1 className="text-3xl font-bold mb-8">Downloads</h1>
 
-            <section className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Technical Documentation</h2>
-                <ul className="space-y-2 list-disc ml-6">
-                    <li>
-                        <a
-                            href="https://www.dguv.de/ifa/praxishilfen/praxishilfen-maschinenschutz/software-sistema/sistema-bibliotheken/index.jsp"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            SISTEMA Software
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.reersafety.com/pdf/cataloghi/Safety_Guide_ENG.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Introduction to Safety
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.reersafety.com/calcolo-distanza-di-sicurezza/index.php?lang=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Distance of Light Curtain from Point
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.reersafety.com/calcolo-distanza-di-sicurezza/index.php?lang=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Distance at a Specific Angle
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.micro-epsilon.com/temperature-sensors/thermoIMAGER/optics/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Thermal Imager Optics Calculator
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.micro-epsilon.com/measurement-systems/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Turn Key Inspection Systems
-                        </a>
-                    </li>
-                </ul>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Catalogs</h2>
-                <ul className="space-y-2 list-disc ml-6">
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/full_product_sheet.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Full Product Sheet
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/bumper_product_sheet.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Bumper Product Sheet
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/mat_product_sheet.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Mat Product Sheet
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/light_curtain_product_sheet.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Light Curtain Product Sheet
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/edge_product_sheet.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Edge Product Sheet
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/dpm_mats_overview.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            DPM Mats Overview
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzato.com/media/images/catalog/category/attachment/ZE_GCS03A18-ENG.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Full Pizzato Catalog
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/safegate_overview.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            SafeGate Overview
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('catalogs/safegate_brochure.pdf')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            SafeGate Brochure
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/position-switches/index.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Microswitches MK series
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/safety-devices/safety-switches-for-hinged-doors.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Safety hinged switches, Palladio series
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/position-switches/switches-for-special-applications.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Position switches for high temperature
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/safety-devices/magnetic-safety-sensors.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Coded magnetic sensors SR series
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/safety-devices/safety-switches-with-separate-actuator-and-lock.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Safety switches with solenoid FG series
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/safety-devices/rope-safety-switches.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Accessories for rope safety switches, FAST line
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.pizzatousa.com/catalog/safety-devices/safety-switches-with-separate-actuator.php"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Safety switches with separate actuator, FW series
-                        </a>
-                    </li>
-                </ul>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Presentations</h2>
-                <ul className="space-y-2 list-disc ml-6">
-                    <li>
-                        <a
-                            href={getDocumentUrl('presentations/the_muting_functions.pptx')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            The Muting Function
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.reersafety.com/pdf/Presentazioni/Mosaic_ENG.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            MOSAIC Safety Systems
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://www.reersafety.com/pdf/Presentazioni/Micron_ENG.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Micron Measurement Overview
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href={getDocumentUrl('presentations/calculating_minimum_safety_distances.pps')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Calculating Minimum Safety Distances
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </div>
-    );
+            {downloadsData.map((category) => (
+                <section key={category.title} className="mb-8">
+                    <h2 className="text-xl font-bold mb-4">{category.title}</h2>
+                    <ul className="space-y-2 list-disc ml-6">
+                        {category.links.map((link, index) => (
+                            <li key={index}>
+                            <a
+                                href={link.isExternal ? link.url : getDocumentUrl(link.url)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                                >
+                                {link.title}
+                            </a>
+                            </li>
+                            ))}
+                    </ul>
+                </section>
+            ))}
+</div>
+);
 };
 
 export default Downloads;
