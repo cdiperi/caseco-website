@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manufacturer } from '../../types/manufacturer';
+import { Manufacturer } from '@/types';
 import { ProductCarousel } from '../carousel/ProductCarousel';
 
 interface ManufacturerSectionProps {
