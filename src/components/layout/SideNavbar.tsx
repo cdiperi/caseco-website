@@ -1,89 +1,78 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, Menu } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { NavItem } from '@/types';
 import { navItems } from '@/data/navItems';
 
-interface Position {
-    x: number;
-    y: number;
-}
-
 const SideNavbar: React.FC = () => {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [submenuPosition, setSubmenuPosition] = useState<Position>({ x: 0, y: 0 });
-    let hideTimeout: NodeJS.Timeout;
+    const [isOpen, setIsOpen] = useState(false);
+    const [submenuPosition, setSubmenuPosition] = useState({ x: 0, y: 0 });
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const handleMouseEnter = useCallback((event: React.MouseEvent<HTMLLIElement>, title: string): void => {
-        clearTimeout(hideTimeout);
-        const rect = event.currentTarget.getBoundingClientRect();
-        setSubmenuPosition({
-            x: rect.right,
-            y: rect.top
-        });
-        setHoveredItem(title);
+    const clearTimeout = useCallback(() => {
+        if (timeoutRef.current) {
+            window.clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
     }, []);
 
-    const handleLinkClick = useCallback((hasSubitems?: boolean): void => {
+    const handleItemHover = useCallback((event: React.MouseEvent<HTMLLIElement>, title: string) => {
+        clearTimeout();
+        const rect = event.currentTarget.getBoundingClientRect();
+        setSubmenuPosition({ x: rect.right, y: rect.top });
+        setHoveredItem(title);
+    }, [clearTimeout]);
+
+    const handleMouseLeave = useCallback(() => {
+        timeoutRef.current = setTimeout(() => setHoveredItem(null), 300);
+    }, []);
+
+    const handleLinkClick = useCallback((hasSubitems = false) => {
         if (window.innerWidth < 768 && !hasSubitems) {
             setIsOpen(false);
         }
     }, []);
 
-    const renderSubMenu = (item: NavItem): React.ReactPortal | null => {
+    const SubMenu = useCallback(({ item }: { item: NavItem }) => {
         if (hoveredItem !== item.title || !item.subitems) return null;
 
         const { x, y } = submenuPosition;
-
-        // Create a temporary div to measure submenu dimensions
-        const tempDiv = document.createElement('div');
-        tempDiv.style.visibility = 'hidden';
-        tempDiv.style.position = 'absolute';
-        tempDiv.innerHTML = `<ul>${item.subitems.map(() => '<li style="height: 32px;"></li>').join('')}</ul>`;
-        document.body.appendChild(tempDiv);
-        const submenuHeight = tempDiv.offsetHeight;
-        const submenuWidth = tempDiv.offsetWidth;
-        document.body.removeChild(tempDiv);
-
-        // Calculate available space and positioning
-        const availableSpaceBelow = window.innerHeight - y;
-        const availableSpaceRight = window.innerWidth - x;
         const isMobile = window.innerWidth < 768;
 
-        // Calculate positions
-        const topPosition = availableSpaceBelow < submenuHeight && y > submenuHeight
-            ? y - submenuHeight + 32 // Add offset for current item height
+        // Calculate positioning based on available space
+        const submenuHeight = item.subitems.length * 40; // Estimate height
+        const submenuWidth = 200; // Reasonable estimate
+
+        const availableBelow = window.innerHeight - y;
+        const availableRight = window.innerWidth - x;
+
+        const top = availableBelow < submenuHeight && y > submenuHeight
+            ? y - submenuHeight + 32
             : y;
 
-        const leftPosition = isMobile || availableSpaceRight < submenuWidth
+        const left = isMobile || availableRight < submenuWidth
             ? Math.max(10, x - submenuWidth)
             : x;
 
         return createPortal(
             <ul
+                className="bg-white shadow-lg rounded-md p-2 transition-all duration-150 overflow-y-auto z-50"
                 style={{
                     position: 'fixed',
-                    left: `${leftPosition}px`,
-                    top: `${topPosition}px`,
+                    left: `${left}px`,
+                    top: `${top}px`,
                     maxHeight: '80vh',
                     maxWidth: '90vw'
                 }}
-                className="bg-white shadow-lg rounded-md p-2 transition-all duration-150 overflow-y-auto"
-                onMouseEnter={() => clearTimeout(hideTimeout)}
-                onMouseLeave={() => {
-                    hideTimeout = setTimeout(() => setHoveredItem(null), 300);
-                }}
+                onMouseEnter={clearTimeout}
+                onMouseLeave={handleMouseLeave}
             >
-                {item.subitems.map((subitem) => (
+                {item.subitems.map(subitem => (
                     <li key={subitem.title} className="py-1 px-4 hover:bg-gray-100 cursor-pointer whitespace-nowrap">
                         {subitem.isInternal ? (
-                            <Link
-                                to={subitem.link || ''}
-                                className="block"
-                                onClick={() => handleLinkClick()}
-                            >
+                            <Link to={subitem.link || ''} className="block" onClick={() => handleLinkClick()}>
                                 {subitem.title}
                             </Link>
                         ) : (
@@ -92,7 +81,7 @@ const SideNavbar: React.FC = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block"
-                                onClick={() => handleLinkClick(!!item.subitems)}
+                                onClick={() => handleLinkClick()}
                             >
                                 {subitem.title}
                             </a>
@@ -102,7 +91,28 @@ const SideNavbar: React.FC = () => {
             </ul>,
             document.body
         );
-    };
+    }, [hoveredItem, submenuPosition, clearTimeout, handleMouseLeave, handleLinkClick]);
+
+    const NavLinkContent = ({ item }: { item: NavItem }) => (
+        <>
+            {item.isInternal ? (
+                <Link to={item.link || ''} className="block flex-grow" onClick={() => handleLinkClick(false)}>
+                    {item.title}
+                </Link>
+            ) : (
+                <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block flex-grow"
+                    onClick={() => handleLinkClick(!!item.subitems)}
+                >
+                    {item.title}
+                </a>
+            )}
+            {item.subitems && <ChevronDown className="ml-2 h-4 w-4" />}
+        </>
+    );
 
     return (
         <>
@@ -116,14 +126,12 @@ const SideNavbar: React.FC = () => {
             <nav
                 className={`
                     w-64 bg-gray-100 p-4 text-sm 
-                    transition-transform transform 
+                    transition-transform duration-300 ease-in-out
                     ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
                     md:translate-x-0 md:block 
                     fixed md:relative 
                     inset-0 md:inset-auto
-                    md:h-auto 
-                    overflow-y-auto 
-                    z-50
+                    z-40 overflow-y-auto 
                     pb-20 md:pb-4
                 `}
             >
@@ -131,38 +139,17 @@ const SideNavbar: React.FC = () => {
                     <div key={section} className="mb-6">
                         <h2 className="text-lg font-semibold mb-2">{section}</h2>
                         <ul>
-                            {items.map((item) => (
+                            {items.map(item => (
                                 <li
                                     key={item.title}
                                     className="relative"
-                                    onMouseEnter={(event) => handleMouseEnter(event, item.title)}
-                                    onMouseLeave={() => {
-                                        hideTimeout = setTimeout(() => setHoveredItem(null), 300);
-                                    }}
+                                    onMouseEnter={e => handleItemHover(e, item.title)}
+                                    onMouseLeave={handleMouseLeave}
                                 >
                                     <div className="flex items-center py-2 px-4 hover:bg-gray-200 cursor-pointer">
-                                        {item.isInternal ? (
-                                            <Link
-                                                to={item.link || ''}
-                                                className="block flex-grow"
-                                                onClick={() => handleLinkClick(false)}
-                                            >
-                                                {item.title}
-                                            </Link>
-                                        ) : (
-                                            <a
-                                                href={item.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="block flex-grow"
-                                                onClick={() => handleLinkClick(!!item.subitems)}
-                                            >
-                                                {item.title}
-                                            </a>
-                                        )}
-                                        {item.subitems && <ChevronDown className="ml-2 h-4 w-4" />}
+                                        <NavLinkContent item={item} />
                                     </div>
-                                    {renderSubMenu(item)}
+                                    <SubMenu item={item} />
                                 </li>
                             ))}
                         </ul>

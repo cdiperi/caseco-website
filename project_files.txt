@@ -1,3 +1,44 @@
+=== /Users/cdiperi/code/caseco/caseco-website/.husky/_/husky.sh ===
+
+#!/usr/bin/env sh
+if [ -z "$husky_skip_init" ]; then
+  debug () {
+    if [ "$HUSKY_DEBUG" = "1" ]; then
+      echo "husky (debug) - $1"
+    fi
+  }
+
+  readonly hook_name="$(basename -- "$0")"
+  debug "starting $hook_name..."
+
+  if [ "$HUSKY" = "0" ]; then
+    debug "HUSKY env variable is set to 0, skipping hook"
+    exit 0
+  fi
+
+  if [ -f ~/.huskyrc ]; then
+    debug "sourcing ~/.huskyrc"
+    . ~/.huskyrc
+  fi
+
+  readonly husky_skip_init=1
+  export husky_skip_init
+  sh -e "$0" "$@"
+  exitCode="$?"
+
+  if [ $exitCode != 0 ]; then
+    echo "husky - $hook_name hook exited with code $exitCode (error)"
+  fi
+
+  if [ $exitCode = 127 ]; then
+    echo "husky - command not found in PATH=$PATH"
+  fi
+
+  exit $exitCode
+fi
+
+
+
 === /Users/cdiperi/code/caseco/caseco-website/tsconfig.node.json ===
 
 {
@@ -493,7 +534,7 @@ export const getDocumentUrl = (path: string): string => {
 === /Users/cdiperi/code/caseco/caseco-website/src/components/sections/ManufacturerSection.tsx ===
 
 import React from 'react';
-import { Manufacturer } from '../../types/manufacturer';
+import { Manufacturer } from '@/types';
 import { ProductCarousel } from '../carousel/ProductCarousel';
 
 interface ManufacturerSectionProps {
@@ -1547,9 +1588,52 @@ export const navItems: NavItems = {
                 { title: 'LMI', link: 'http://www.londonmat.com/mats/zone.html' }
             ],
         },
+        { title: 'Measuring and Inspection Systems', link: 'https://www.micro-epsilon.com/measurement-systems/Kunststoff-Inspektion/' },
+        {
+            title: 'Light Curtains',
+            subitems: [
+                { title: 'EOS-4', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/48-eos4-en' },
+                { title: 'Admiral', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/49-admiral-en' },
+                { title: 'SafeGate', link: 'https://www.reersafety.com/us/en/products/safety-light-curtains/item/430-safegate-en' },
+                { title: 'Light Curtain Accessories', link: 'https://www.reersafety.com/us/en/products/accessories' },
+                { title: 'Discrete Safety Beams', link: 'https://www.reersafety.com/us/en/products/photocells' },
+                { title: 'Light Curtain Water Tight Enclosures', link: 'https://www.reersafety.com/us/en/products/watertight-enclosures' },
+                { title: 'ATEX – Explosion Environment Enclosures for Light Curtains', link: 'https://www.reersafety.com/us/en/products/atex-light-curtains' },
+                { title: 'Type 2 Slim Light Curtain', link: 'https://www.reersafety.com/us/en/products/measurement-sensors/item/66-micron-en' },
+                { title: 'Muting Photocells', link: 'https://www.reersafety.com/us/en/products/muting-photocell-en' },
+                { title: 'SAFECODER – Safety Rated Encoder', link: 'https://www.reersafety.com/us/en/products/safety-encoders' }
+            ],
+        },
+        { title: 'Safety Relays', link: 'https://www.tapeswitch.com/sim.html' },
+        {
+            title: 'Safety Interlock Switches',
+            subitems: [
+                { title: 'Mechanical Keyed Type', link: 'https://www.reersafety.com/us/en/products/safety-interlock/item/924-safelock-en' },
+                { title: 'Electronic and Magnetic Type', link: 'https://www.mechancontrols.com/products/o-type/' },
+                { title: 'TRAP-KEY Technology', link: 'http://www.castell.com/us/castell/products.php'}
+            ],
+        },
+        { title: 'E-Stop Control Relays', link: 'https://www.reersafety.com/us/en/products/safety-interfaces' },
     ],
     Manufacturers: [
         { title: 'Castell', link: 'http://www.castell.com/us/castell/products.php' },
+        { title: 'Reer Safety', link: 'https://www.reersafety.com/us/en/' },
+        { title: 'Kontronik Power Systems', link: 'https://www.kontronik.com/en.html' },
+        { title: 'Gordon Engineering', link: 'http://www.gordoneng.com/default.htm' },
+        { title: 'London Mat', link: 'http://www.londonmat.com/' },
+        { title: 'Mechan Controls', link: 'http://www.mechancontrols.co.uk/' },
+        { title: 'Micro Epsilon', link: 'http://www.micro-epsilon.com/index.html' },
+        {
+            title: 'Tapeswitch',
+            subitems: [
+                { title: 'Tapeswitch Corporation', link: 'http://www.tapeswitch.com/index.html' },
+                {
+                    title: 'Tapeswitch Quick References',
+                    link: '/tapeswitch-quick-references',
+                    isInternal: true
+                }
+            ],
+        },
     ],
 };
 
