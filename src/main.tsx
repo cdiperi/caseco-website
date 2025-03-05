@@ -16,7 +16,7 @@ if (!rootElement) {
 // Create root with proper typing
 const root = createRoot(rootElement);
 
-// Render app with error boundary
+// Render app with AuthProvider and ErrorBoundary
 root.render(
     <StrictMode>
         <App />
@@ -27,6 +27,3 @@ root.render(
 if (import.meta.hot) {
     import.meta.hot.accept();
 }
-
-// Report web vitals if needed
-// reportWebVitals();
